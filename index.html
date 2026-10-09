@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Discover shops, schools, hospitals, restaurants and local services in Manuguru.">
+  <title>Manuguru | Town Guide</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Town Guide home"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a>
+    <nav><a href="#categories">Categories</a><a href="#directory">Explore places</a><a href="#about">About</a></nav>
+    <a class="list-link" href="mailto:town-guide@example.com?subject=Manuguru%20business%20listing">List your business ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span> YOUR LOCAL DISCOVERY GUIDE</span>
+        <h1>Welcome to<br><em>Manuguru.</em></h1>
+        <p>Find the places, services and local businesses that make your town yours.</p>
+        <form class="searchbar" id="searchForm">
+          <span aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="Search shops, schools, hospitals..." aria-label="Search businesses and places">
+          <button type="submit">Search</button>
+        </form>
+        <div class="hero-note"><span>⌖</span> Manuguru, Telangana, India</div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div><div class="hill hill-back"></div><div class="hill hill-front"></div>
+        <div class="map-card"><span class="map-pin">⌖</span><div><b>Manuguru</b><small>Explore your town</small></div></div>
+        <div class="floating-label label-one">Local places <b>↗</b></div>
+        <div class="floating-label label-two">One town, one guide</div>
+      </div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="section-heading"><div><span class="eyebrow">EXPLORE THE TOWN</span><h2>What are you looking for?</h2></div><span class="count-pill" id="totalCount"></span></div>
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <section class="directory section" id="directory">
+      <div class="section-heading directory-heading"><div><span class="eyebrow">LOCAL DIRECTORY</span><h2 id="directoryTitle">Explore Manuguru</h2><p class="muted" id="directorySubtitle">Browse the listings collected for your town.</p></div>
+        <div class="controls"><select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select><select id="sortFilter" aria-label="Sort listings"><option value="name">Name A–Z</option><option value="category">Category</option></select></div>
+      </div>
+      <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-button" type="button">Clear filters</button></div>
+      <div class="listing-grid" id="listingGrid"></div>
+      <div class="empty-state" id="emptyState" hidden><span>⌕</span><h3>No listings found</h3><p>Try another search or category.</p></div>
+      <p class="data-note">Directory information is collected from public listings and may be incomplete or outdated. Please confirm details with the business before visiting. Listings without a phone number have no contact number in the current dataset.</p>
+    </section>
+
+    <section class="cta" id="about"><div><span class="eyebrow">BUILT FOR THE COMMUNITY</span><h2>Know a place we should add?</h2><p>Help make the Manuguru directory more useful by sharing a correction or a local business.</p></div><a href="mailto:town-guide@example.com?subject=Town%20Guide%20listing%20or%20correction">Suggest a listing <span>↗</span></a></section>
+  </main>
+  <footer><a class="brand footer-brand" href="#"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a><span>Discover your town. Support local businesses.</span><span>© <span id="year"></span> Town Guide · Manuguru</span></footer>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

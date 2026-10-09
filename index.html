@@ -1,58 +1,376 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Discover shops, schools, hospitals, restaurants and local services in Manuguru.">
-  <title>Manuguru | Town Guide</title>
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Your guide to Manuguru, Telangana. Discover local businesses, government services, public transport, education, healthcare and places.">
+  <title>Manuguru Town Guide | Explore Your Town</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
   <header class="topbar">
-    <a class="brand" href="#" aria-label="Town Guide home"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a>
-    <nav><a href="#categories">Categories</a><a href="#directory">Explore places</a><a href="#about">About</a></nav>
-    <a class="list-link" href="mailto:town-guide@example.com?subject=Manuguru%20business%20listing">List your business ↗</a>
+    <a class="brand" href="#" aria-label="Manuguru Town Guide home">
+      <span class="brand-icon">⌖</span>
+      <span>MANUGURU <b>TOWN GUIDE</b></span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <a href="#categories">Categories</a>
+      <a href="#public-services">Government</a>
+      <a href="#transport">Transport</a>
+      <a href="#places">Explore Manuguru</a>
+      <a href="#directory">Directory</a>
+    </nav>
+
+    <a class="list-link" href="#contribute">Suggest information ↗</a>
   </header>
 
-  <main>
+  <main id="main">
+
+    <!-- HOMEPAGE -->
     <section class="hero">
       <div class="hero-copy">
-        <span class="eyebrow"><span class="dot"></span> YOUR LOCAL DISCOVERY GUIDE</span>
+        <span class="eyebrow">
+          <span class="dot"></span>
+          YOUR LOCAL DISCOVERY GUIDE
+        </span>
+
         <h1>Welcome to<br><em>Manuguru.</em></h1>
-        <p>Find the places, services and local businesses that make your town yours.</p>
+
+        <p>
+          Discover local places, government services, transport,
+          education, healthcare and businesses — all in one place.
+        </p>
+
         <form class="searchbar" id="searchForm">
           <span aria-hidden="true">⌕</span>
-          <input id="searchInput" type="search" placeholder="Search shops, schools, hospitals..." aria-label="Search businesses and places">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search shops, offices, places..."
+            aria-label="Search Manuguru Town Guide">
           <button type="submit">Search</button>
         </form>
-        <div class="hero-note"><span>⌖</span> Manuguru, Telangana, India</div>
+
+        <div class="hero-note">
+          <span>⌖</span> Manuguru, Telangana, India
+        </div>
       </div>
+
       <div class="hero-art" aria-hidden="true">
-        <div class="sun"></div><div class="hill hill-back"></div><div class="hill hill-front"></div>
-        <div class="map-card"><span class="map-pin">⌖</span><div><b>Manuguru</b><small>Explore your town</small></div></div>
-        <div class="floating-label label-one">Local places <b>↗</b></div>
-        <div class="floating-label label-two">One town, one guide</div>
+        <div class="sun"></div>
+        <div class="hill hill-back"></div>
+        <div class="hill hill-front"></div>
+
+        <div class="map-card">
+          <span class="map-pin">⌖</span>
+          <div>
+            <b>Manuguru</b>
+            <small>Explore your town</small>
+          </div>
+        </div>
+
+        <div class="floating-label label-one">
+          Local places <b>↗</b>
+        </div>
+
+        <div class="floating-label label-two">
+          One town, one guide
+        </div>
       </div>
     </section>
 
-    <section class="section" id="categories">
-      <div class="section-heading"><div><span class="eyebrow">EXPLORE THE TOWN</span><h2>What are you looking for?</h2></div><span class="count-pill" id="totalCount"></span></div>
-      <div class="category-grid" id="categoryGrid"></div>
+    <!-- QUICK ACCESS -->
+    <section class="section" aria-labelledby="quick-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">QUICK ACCESS</span>
+          <h2 id="quick-title">What do you need today?</h2>
+        </div>
+      </div>
+
+      <div class="category-grid">
+        <a class="category-card" href="#public-services">
+          <span class="category-symbol green">▥</span>
+          <strong>Government Services</strong>
+          <small>Police, public offices and utilities</small>
+        </a>
+
+        <a class="category-card" href="#transport">
+          <span class="category-symbol blue">▰</span>
+          <strong>Public Transport</strong>
+          <small>Buses, railway and local travel</small>
+        </a>
+
+        <a class="category-card" href="#healthcare">
+          <span class="category-symbol red">✚</span>
+          <strong>Health & Emergency</strong>
+          <small>Hospitals, clinics and pharmacies</small>
+        </a>
+
+        <a class="category-card" href="#education">
+          <span class="category-symbol gold">▤</span>
+          <strong>Education & Careers</strong>
+          <small>Schools, colleges and opportunities</small>
+        </a>
+
+        <a class="category-card" href="#directory">
+          <span class="category-symbol purple">⌂</span>
+          <strong>Local Businesses</strong>
+          <small>Shops, food and everyday services</small>
+        </a>
+
+        <a class="category-card" href="#places">
+          <span class="category-symbol green">◎</span>
+          <strong>Places & Gallery</strong>
+          <small>Discover the town and its landmarks</small>
+        </a>
+      </div>
     </section>
 
+    <!-- GOVERNMENT AND PUBLIC SERVICES -->
+    <section class="section directory" id="public-services">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">PUBLIC INFORMATION</span>
+          <h2>Government & Public Services</h2>
+          <p class="muted">
+            Find public offices and essential services in and around Manuguru.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-grid">
+        <article class="category-card">
+          <span class="category-symbol green">✚</span>
+          <strong>Police & Emergency</strong>
+          <small>Police station information and official emergency contacts.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol blue">▥</span>
+          <strong>Municipality & Administration</strong>
+          <small>Local administration, civic services and public notices.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol gold">▤</span>
+          <strong>Revenue & MeeSeva</strong>
+          <small>Public service centres and government application links.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol purple">⌂</span>
+          <strong>Public Utilities</strong>
+          <small>Electricity, water, sanitation and postal services.</small>
+        </article>
+      </div>
+
+      <p class="data-note">
+        Office addresses, telephone numbers and working hours will be
+        published after verification. For immediate emergencies in India,
+        call 112.
+      </p>
+    </section>
+
+    <!-- PUBLIC TRANSPORT -->
+    <section class="section" id="transport">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">GETTING AROUND</span>
+          <h2>Public Transport</h2>
+          <p class="muted">
+            Plan local journeys and find useful travel information.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-grid">
+        <article class="category-card">
+          <span class="category-symbol blue">▰</span>
+          <strong>Bus Services</strong>
+          <small>Bus stops, destinations, routes and verified timings.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol green">↔</span>
+          <strong>Railway Information</strong>
+          <small>Station location, train information and official railway links.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol gold">⌖</span>
+          <strong>Auto & Taxi</strong>
+          <small>Local transport contacts and pickup locations.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol purple">◎</span>
+          <strong>Maps & Directions</strong>
+          <small>Find destinations and plan your route.</small>
+        </article>
+      </div>
+
+      <p class="data-note">
+        Route details, fares and schedules are not yet verified.
+        We will add them using reliable transport sources.
+      </p>
+    </section>
+
+    <!-- EXPLORE MANUGURU -->
+    <section class="section directory" id="places">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">OUR TOWN, OUR STORIES</span>
+          <h2>Explore Manuguru</h2>
+          <p class="muted">
+            Discover local landmarks, nature, community spaces and places
+            worth knowing about.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-grid">
+        <article class="category-card">
+          <span class="category-symbol green">◉</span>
+          <strong>Landmarks & Local Places</strong>
+          <small>Important places, neighbourhoods and local attractions.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol gold">▧</span>
+          <strong>Photo Gallery</strong>
+          <small>Photographs of Manuguru and its surroundings.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol blue">♧</span>
+          <strong>Parks & Public Spaces</strong>
+          <small>Community areas, recreation and outdoor places.</small>
+        </article>
+
+        <article class="category-card">
+          <span class="category-symbol purple">▤</span>
+          <strong>About Manuguru</strong>
+          <small>Town background, local culture and useful information.</small>
+        </article>
+      </div>
+
+      <p class="data-note">
+        This section will be expanded with genuine photographs,
+        accurate place names and verified locations.
+      </p>
+    </section>
+
+    <!-- EDUCATION AND HEALTHCARE -->
+    <section class="section" id="education">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">LEARNING & OPPORTUNITY</span>
+          <h2>Education & Careers</h2>
+          <p class="muted">
+            Find educational institutions, training and useful official links.
+          </p>
+        </div>
+      </div>
+      <div id="educationInfo">
+        <p>Explore schools, colleges and training centres in the directory below.</p>
+      </div>
+    </section>
+
+    <section class="section directory" id="healthcare">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">HEALTH & WELLBEING</span>
+          <h2>Healthcare</h2>
+          <p class="muted">
+            Find hospitals, clinics, pharmacies and other healthcare providers.
+          </p>
+        </div>
+      </div>
+      <div id="healthcareInfo">
+        <p>Use the directory below to explore available healthcare listings.</p>
+      </div>
+    </section>
+
+    <!-- EXISTING DIRECTORY: KEEP THESE IDS FOR script.js -->
     <section class="directory section" id="directory">
-      <div class="section-heading directory-heading"><div><span class="eyebrow">LOCAL DIRECTORY</span><h2 id="directoryTitle">Explore Manuguru</h2><p class="muted" id="directorySubtitle">Browse the listings collected for your town.</p></div>
-        <div class="controls"><select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select><select id="sortFilter" aria-label="Sort listings"><option value="name">Name A–Z</option><option value="category">Category</option></select></div>
+      <div class="section-heading directory-heading">
+        <div>
+          <span class="eyebrow">LOCAL DIRECTORY</span>
+          <h2 id="directoryTitle">Explore Manuguru</h2>
+          <p class="muted" id="directorySubtitle">
+            Browse local businesses and institutions.
+          </p>
+        </div>
+
+        <div class="controls">
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="">All categories</option>
+          </select>
+
+          <select id="sortFilter" aria-label="Sort listings">
+            <option value="name">Name A–Z</option>
+            <option value="category">Category</option>
+          </select>
+        </div>
       </div>
-      <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-button" type="button">Clear filters</button></div>
+
+      <div class="results-line">
+        <span id="resultCount" aria-live="polite"></span>
+        <button id="clearFilters" class="text-button" type="button">
+          Clear filters
+        </button>
+      </div>
+
       <div class="listing-grid" id="listingGrid"></div>
-      <div class="empty-state" id="emptyState" hidden><span>⌕</span><h3>No listings found</h3><p>Try another search or category.</p></div>
-      <p class="data-note">Directory information is collected from public listings and may be incomplete or outdated. Please confirm details with the business before visiting. Listings without a phone number have no contact number in the current dataset.</p>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <span>⌕</span>
+        <h3>No listings found</h3>
+        <p>Try another search or category.</p>
+      </div>
+
+      <p class="data-note">
+        Directory information may be incomplete or outdated. Confirm details
+        with the relevant organisation before travelling. We will show
+        verified information as it becomes available.
+      </p>
     </section>
 
-    <section class="cta" id="about"><div><span class="eyebrow">BUILT FOR THE COMMUNITY</span><h2>Know a place we should add?</h2><p>Help make the Manuguru directory more useful by sharing a correction or a local business.</p></div><a href="mailto:town-guide@example.com?subject=Town%20Guide%20listing%20or%20correction">Suggest a listing <span>↗</span></a></section>
+    <!-- COMMUNITY CONTRIBUTIONS -->
+    <section class="cta" id="contribute">
+      <div>
+        <span class="eyebrow">BUILT FOR THE COMMUNITY</span>
+        <h2>Know something we should add?</h2>
+        <p>
+          Help improve Manuguru Town Guide by suggesting a place, sharing
+          a correction or pointing us to an official source.
+        </p>
+      </div>
+      <a
+        href="https://github.com/kcpv0521-svg/Manuguru_town-guide/issues"
+        target="_blank"
+        rel="noopener noreferrer">
+        Suggest an update <span>↗</span>
+      </a>
+    </section>
+
   </main>
-  <footer><a class="brand footer-brand" href="#"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a><span>Discover your town. Support local businesses.</span><span>© <span id="year"></span> Town Guide · Manuguru</span></footer>
+
+  <footer>
+    <a class="brand footer-brand" href="#">
+      <span class="brand-icon">⌖</span>
+      <span>MANUGURU <b>TOWN GUIDE</b></span>
+    </a>
+    <span>Useful local information for everyone.</span>
+    <span>© <span id="year"></span> Manuguru Town Guide</span>
+  </footer>
+
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>

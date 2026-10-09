@@ -1,8 +1,10 @@
 
 /* ==========================================
    MANUGURU TOWN GUIDE
-   Directory search, filters and navigation
+   Directory, Search, Filters & Navigation
 ========================================== */
+
+"use strict";
 
 const CATEGORY_ICONS = {
   "Schools": "🎓",
@@ -16,6 +18,7 @@ const CATEGORY_ICONS = {
   "Hotels & Lodges": "🛏️",
   "Salons, Beauty & Personal Care": "💇",
   "Petrol Bunks & Automotive": "⛽",
+  "Banks, Atms & Public Services": "🏦",
   "Banks, ATMs & Public Services": "🏦",
   "Temples, Theatres & Places": "📍"
 };
@@ -28,18 +31,21 @@ const state = {
 
 const $ = id => document.getElementById(id);
 
-const normalize = value =>
-  String(value ?? "").toLocaleLowerCase().trim();
-
 const listings = Array.isArray(window.MANUGURU_LISTINGS)
   ? window.MANUGURU_LISTINGS
   : [];
 
+const normalize = value =>
+  String(value ?? "").toLocaleLowerCase().trim();
+
 const allCategories = [
-  ...new Set(listings.map(item => item.category).filter(Boolean))
+  ...new Set(
+    listings
+      .map(item => String(item.category || "").trim())
+      .filter(Boolean)
+  )
 ].sort((a, b) => a.localeCompare(b));
 
-/* Safely display text from directory records */
 function safeText(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
@@ -50,7 +56,11 @@ function safeText(value) {
   })[char]);
 }
 
-/* Populate category filters without duplicate options */
+function iconFor(category) {
+  return CATEGORY_ICONS[category] || "📍";
+}
+
+/* Populate the category dropdown */
 function buildCategoryFilter() {
   const filter = $("categoryFilter");
   if (!filter) return;
@@ -70,52 +80,50 @@ function buildCategoryFilter() {
   });
 }
 
-/* Category icon helper */
-function iconFor(category) {
-  return CATEGORY_ICONS[category] || "📍";
-}
-
-/* Search and filter records */
+/* Filter and sort the directory */
 function filteredListings() {
-  const items = listings.filter(item => {
-    const name = item.name || "";
-    const category = item.category || "";
-    const area = item.area || "";
-    const phone = item.phone || "";
+  const query = normalize(state.query);
 
-    const searchableText = normalize(
-      `${name} ${category} ${area} ${phone}`
-    );
+  return listings
+    .filter(item => {
+      const searchableText = normalize([
+        item.name,
+        item.category,
+        item.area,
+        item.phone
+      ].join(" "));
 
-    const matchesSearch =
-      !state.query || searchableText.includes(normalize(state.query));
+      const matchesSearch =
+        !query || searchableText.includes(query);
 
-    const matchesCategory =
-      !state.category || category === state.category;
+      const matchesCategory =
+        !state.category || item.category === state.category;
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      if (state.sort === "category") {
+        return String(a.category || "").localeCompare(
+          String(b.category || "")
+        ) || String(a.name || "").localeCompare(
+          String(b.name || "")
+        );
+      }
 
-  items.sort((a, b) => {
-    if (state.sort === "category") {
-      return (a.category || "").localeCompare(b.category || "") ||
-        (a.name || "").localeCompare(b.name || "");
-    }
-
-    return (a.name || "").localeCompare(b.name || "");
-  });
-
-  return items;
+      return String(a.name || "").localeCompare(
+        String(b.name || "")
+      );
+    });
 }
 
-/* Build a directory card */
+/* Create a listing card */
 function createListingCard(item) {
   const card = document.createElement("article");
   card.className = "listing-card";
 
   const name = item.name || "Unnamed listing";
   const category = item.category || "Local listing";
-  const area = item.area || "Manuguru; exact address not listed";
+  const area = item.area || "Exact address not listed";
   const phone = String(item.phone || "").trim();
 
   const phoneDigits = phone.replace(/[^\d+]/g, "");
@@ -130,7 +138,9 @@ function createListingCard(item) {
 
   card.innerHTML = `
     <div class="listing-top">
-      <span class="listing-icon">${iconFor(category)}</span>
+      <span class="listing-icon" aria-hidden="true">
+        ${iconFor(category)}
+      </span>
       <span class="category-tag">${safeText(category)}</span>
     </div>
 
@@ -159,21 +169,19 @@ function createListingCard(item) {
   return card;
 }
 
-/* Render filtered directory results */
+/* Render the directory */
 function renderListings() {
   const grid = $("listingGrid");
   if (!grid) return;
 
   const items = filteredListings();
-  grid.replaceChildren();
-
   const fragment = document.createDocumentFragment();
 
   items.forEach(item => {
     fragment.appendChild(createListingCard(item));
   });
 
-  grid.appendChild(fragment);
+  grid.replaceChildren(fragment);
 
   const resultCount = $("resultCount");
   if (resultCount) {
@@ -183,12 +191,17 @@ function renderListings() {
 
   const emptyState = $("emptyState");
   if (emptyState) {
-    emptyState.hidden = items.length !== 0;
+    emptyState.hidden = items.length > 0;
   }
 
   const totalCount = $("totalCount");
   if (totalCount) {
     totalCount.textContent = `${listings.length} listings`;
+  }
+
+  const heroCount = $("heroCount");
+  if (heroCount) {
+    heroCount.textContent = listings.length.toLocaleString();
   }
 
   const title = $("directoryTitle");
@@ -206,14 +219,14 @@ function renderListings() {
   });
 }
 
-/* Connect the existing search form */
+/* Search form */
 const searchForm = $("searchForm");
+
 if (searchForm) {
   searchForm.addEventListener("submit", event => {
     event.preventDefault();
 
     state.query = $("searchInput")?.value || "";
-
     renderListings();
 
     $("directory")?.scrollIntoView({
@@ -223,8 +236,9 @@ if (searchForm) {
   });
 }
 
-/* Update results while typing */
+/* Live search */
 const searchInput = $("searchInput");
+
 if (searchInput) {
   searchInput.addEventListener("input", event => {
     state.query = event.target.value;
@@ -234,6 +248,7 @@ if (searchInput) {
 
 /* Category dropdown */
 const categoryFilter = $("categoryFilter");
+
 if (categoryFilter) {
   categoryFilter.addEventListener("change", event => {
     state.category = event.target.value;
@@ -243,6 +258,7 @@ if (categoryFilter) {
 
 /* Sorting */
 const sortFilter = $("sortFilter");
+
 if (sortFilter) {
   sortFilter.addEventListener("change", event => {
     state.sort = event.target.value;
@@ -250,8 +266,9 @@ if (sortFilter) {
   });
 }
 
-/* Clear all filters */
+/* Clear filters */
 const clearFilters = $("clearFilters");
+
 if (clearFilters) {
   clearFilters.addEventListener("click", () => {
     state.query = "";
@@ -266,7 +283,7 @@ if (clearFilters) {
   });
 }
 
-/* Category shortcuts can filter the directory when configured */
+/* Category shortcut navigation */
 document.querySelectorAll("[data-category]").forEach(element => {
   element.addEventListener("click", event => {
     const category = element.dataset.category;
@@ -276,7 +293,9 @@ document.querySelectorAll("[data-category]").forEach(element => {
     event.preventDefault();
 
     state.category = category;
+    state.query = "";
 
+    if ($("searchInput")) $("searchInput").value = "";
     if ($("categoryFilter")) {
       $("categoryFilter").value = category;
     }
@@ -292,10 +311,11 @@ document.querySelectorAll("[data-category]").forEach(element => {
 
 /* Footer year */
 const year = $("year");
+
 if (year) {
   year.textContent = new Date().getFullYear();
 }
 
-/* Initialise */
+/* Initialise the directory */
 buildCategoryFilter();
 renderListings();

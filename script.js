@@ -1,112 +1,174 @@
 
 /* ==========================================
    MANUGURU TOWN GUIDE
-   Directory, Search, Filters & Navigation
-========================================== */
+   Search, filters, sorting and listing cards
+   ========================================== */
 
-"use strict";
+(() => {
+  "use strict";
 
-const CATEGORY_ICONS = {
-  "Schools": "🎓",
-  "Colleges & Training": "🏫",
-  "Clothing, Jewellery & Tailoring": "🛍️",
-  "Mobile, Electronics & Computers": "📱",
-  "Grocery & Supermarkets": "🛒",
-  "Hospitals & Clinics": "🏥",
-  "Medical Stores & Pharmacies": "💊",
-  "Restaurants & Food": "🍽️",
-  "Hotels & Lodges": "🛏️",
-  "Salons, Beauty & Personal Care": "💇",
-  "Petrol Bunks & Automotive": "⛽",
-  "Banks, Atms & Public Services": "🏦",
-  "Banks, ATMs & Public Services": "🏦",
-  "Temples, Theatres & Places": "📍"
-};
+  const listings = Array.isArray(window.MANUGURU_LISTINGS)
+    ? window.MANUGURU_LISTINGS
+    : Array.isArray(window.TOWN_GUIDE_DATA)
+      ? window.TOWN_GUIDE_DATA
+      : [];
 
-const state = {
-  query: "",
-  category: "",
-  sort: "name"
-};
+  const $ = (id) => document.getElementById(id);
 
-const $ = id => document.getElementById(id);
+  const searchForm = $("searchForm");
+  const searchInput = $("searchInput");
+  const categoryFilter = $("categoryFilter");
+  const sortFilter = $("sortFilter");
+  const listingGrid = $("listingGrid");
+  const resultCount = $("resultCount");
+  const directoryTitle = $("directoryTitle");
+  const directorySubtitle = $("directorySubtitle");
+  const clearFilters = $("clearFilters");
+  const emptyState = $("emptyState");
 
-const listings = Array.isArray(window.MANUGURU_LISTINGS)
-  ? window.MANUGURU_LISTINGS
-  : [];
+  const CATEGORY_ICONS = {
+    "Schools": "🎓",
+    "Colleges & Training": "📚",
+    "Clothing, Jewellery & Tailoring": "👕",
+    "Mobile, Electronics & Computers": "📱",
+    "Grocery & Supermarkets": "🛒",
+    "Hospitals & Clinics": "🏥",
+    "Medical Stores & Pharmacies": "💊",
+    "Restaurants & Food": "🍽️",
+    "Hotels & Lodges": "🏨",
+    "Salons, Beauty & Personal Care": "✂️",
+    "Petrol Bunks & Automotive": "🚗",
+    "Banks, Atms & Public Services": "🏦",
+    "Temples, Theatres & Places": "📍",
+    "Transport": "🚌"
+  };
 
-const normalize = value =>
-  String(value ?? "").toLocaleLowerCase().trim();
+  const CATEGORY_GROUPS = {
+    "Shopping & Daily Needs": [
+      "Grocery & Supermarkets"
+    ],
+    "Food & Restaurants": [
+      "Restaurants & Food",
+      "Hotels & Lodges"
+    ],
+    "Healthcare": [
+      "Hospitals & Clinics",
+      "Medical Stores & Pharmacies"
+    ],
+    "Education": [
+      "Schools",
+      "Colleges & Training"
+    ],
+    "Banks & Public Services": [
+      "Banks, Atms & Public Services"
+    ],
+    "Electronics & Mobile": [
+      "Mobile, Electronics & Computers"
+    ],
+    "Automotive & Fuel": [
+      "Petrol Bunks & Automotive"
+    ],
+    "Fashion & Jewellery": [
+      "Clothing, Jewellery & Tailoring"
+    ],
+    "Transport": [
+      "Transport"
+    ]
+  };
 
-const allCategories = [
-  ...new Set(
-    listings
-      .map(item => String(item.category || "").trim())
-      .filter(Boolean)
-  )
-].sort((a, b) => a.localeCompare(b));
+  let activeShortcut = "";
 
-function safeText(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
-}
+  function normalize(value) {
+    return String(value ?? "")
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
 
-function iconFor(category) {
-  return CATEGORY_ICONS[category] || "📍";
-}
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
 
-/* Populate the category dropdown */
-function buildCategoryFilter() {
-  const filter = $("categoryFilter");
-  if (!filter) return;
+  function getCategoryNames() {
+    return [...new Set(
+      listings
+        .map((item) => item.category)
+        .filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b));
+  }
 
-  filter.replaceChildren();
+  function setupCategoryFilter() {
+    if (!categoryFilter) return;
 
-  const allOption = document.createElement("option");
-  allOption.value = "";
-  allOption.textContent = "All categories";
-  filter.appendChild(allOption);
+    const currentValue = categoryFilter.value;
 
-  allCategories.forEach(category => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-    filter.appendChild(option);
-  });
-}
+    categoryFilter.innerHTML =
+      '<option value="">All categories</option>' +
+      getCategoryNames().map((category) =>
+        `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`
+      ).join("");
 
-/* Filter and sort the directory */
-function filteredListings() {
-  const query = normalize(state.query);
+    if ([...categoryFilter.options].some(
+      (option) => option.value === currentValue
+    )) {
+      categoryFilter.value = currentValue;
+    }
+  }
 
-  return listings
-    .filter(item => {
+  function getShortcutCategories(shortcut) {
+    if (CATEGORY_GROUPS[shortcut]) {
+      return CATEGORY_GROUPS[shortcut];
+    }
+
+    return [shortcut];
+  }
+
+  function getFilteredListings() {
+    const query = normalize(searchInput?.value);
+    const selectedCategory = categoryFilter?.value || "";
+    const sortBy = sortFilter?.value || "name";
+
+    let results = listings.filter((item) => {
       const searchableText = normalize([
         item.name,
         item.category,
         item.area,
-        item.phone
-      ].join(" "));
+        item.address,
+        item.description
+      ].filter(Boolean).join(" "));
 
       const matchesSearch =
         !query || searchableText.includes(query);
 
-      const matchesCategory =
-        !state.category || item.category === state.category;
+      const matchesFilter =
+        !selectedCategory || item.category === selectedCategory;
 
-      return matchesSearch && matchesCategory;
-    })
-    .sort((a, b) => {
-      if (state.sort === "category") {
+      const shortcutCategories =
+        activeShortcut ? getShortcutCategories(activeShortcut) : [];
+
+      const matchesShortcut =
+        !activeShortcut || shortcutCategories.includes(item.category);
+
+      return matchesSearch && matchesFilter && matchesShortcut;
+    });
+
+    results.sort((a, b) => {
+      if (sortBy === "category") {
         return String(a.category || "").localeCompare(
           String(b.category || "")
-        ) || String(a.name || "").localeCompare(
-          String(b.name || "")
+        ) || String(a.name || "").localeCompare(String(b.name || ""));
+      }
+
+      if (sortBy === "area") {
+        return String(a.area || a.address || "").localeCompare(
+          String(b.area || b.address || "")
         );
       }
 
@@ -114,208 +176,153 @@ function filteredListings() {
         String(b.name || "")
       );
     });
-}
 
-/* Create a listing card */
-function createListingCard(item) {
-  const card = document.createElement("article");
-  card.className = "listing-card";
-
-  const name = item.name || "Unnamed listing";
-  const category = item.category || "Local listing";
-  const area = item.area || "Exact address not listed";
-  const phone = String(item.phone || "").trim();
-
-  const phoneDigits = phone.replace(/[^\d+]/g, "");
-  const hasPhone = /\d{5,}/.test(phoneDigits);
-
-  const mapQuery = [
-    name,
-    area,
-    "Manuguru",
-    "Telangana"
-  ].join(" ");
-
-  card.innerHTML = `
-    <div class="listing-top">
-      <span class="listing-icon" aria-hidden="true">
-        ${iconFor(category)}
-      </span>
-      <span class="category-tag">${safeText(category)}</span>
-    </div>
-
-    <h3>${safeText(name)}</h3>
-
-    <div class="listing-location">
-      <span aria-hidden="true">⌖</span>
-      <span>${safeText(area)}</span>
-    </div>
-
-    <div class="listing-actions">
-      ${
-        hasPhone
-          ? `<a class="action primary"
-                href="tel:${safeText(phoneDigits)}">Call</a>`
-          : `<span class="action disabled">Phone not listed</span>`
-      }
-
-      <a class="action"
-         href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}"
-         target="_blank"
-         rel="noopener noreferrer">Directions ↗</a>
-    </div>
-  `;
-
-  return card;
-}
-
-/* Render the directory */
-function renderListings() {
-  const grid = $("listingGrid");
-  if (!grid) return;
-
-  const items = filteredListings();
-  const fragment = document.createDocumentFragment();
-
-  items.forEach(item => {
-    fragment.appendChild(createListingCard(item));
-  });
-
-  grid.replaceChildren(fragment);
-
-  const resultCount = $("resultCount");
-  if (resultCount) {
-    resultCount.textContent =
-      `Showing ${items.length} of ${listings.length} listings`;
+    return results;
   }
 
-  const emptyState = $("emptyState");
-  if (emptyState) {
-    emptyState.hidden = items.length > 0;
-  }
+  function createListingCard(item) {
+    const name = escapeHTML(item.name || "Unnamed listing");
+    const category = escapeHTML(item.category || "Local listing");
+    const area = escapeHTML(item.area || item.address || "Location not provided");
+    const icon = CATEGORY_ICONS[item.category] || "📍";
 
-  const totalCount = $("totalCount");
-  if (totalCount) {
-    totalCount.textContent = `${listings.length} listings`;
-  }
+    const phone = String(item.phone || "").replace(/[^\d+]/g, "");
+    const callButton = phone
+      ? `<a class="listing-action" href="tel:${escapeHTML(phone)}">Call</a>`
+      : "";
 
-  const heroCount = $("heroCount");
-  if (heroCount) {
-    heroCount.textContent = listings.length.toLocaleString();
-  }
-
-  const title = $("directoryTitle");
-  if (title) {
-    title.textContent = state.category
-      ? `${state.category} in Manuguru`
-      : "Explore Manuguru";
-  }
-
-  document.querySelectorAll("[data-category]").forEach(element => {
-    element.classList.toggle(
-      "active",
-      element.dataset.category === state.category
+    const mapQuery = encodeURIComponent(
+      `${item.name || ""}, ${item.area || item.address || ""}, Manuguru, Telangana`
     );
-  });
-}
 
-/* Search form */
-const searchForm = $("searchForm");
+    const directionsButton =
+      `<a class="listing-action listing-action-secondary"
+          href="https://www.google.com/maps/search/?api=1&query=${mapQuery}"
+          target="_blank"
+          rel="noopener noreferrer">Directions</a>`;
 
-if (searchForm) {
-  searchForm.addEventListener("submit", event => {
-    event.preventDefault();
+    return `
+      <article class="listing-card">
+        <div class="listing-card-icon" aria-hidden="true">${icon}</div>
+        <div class="listing-card-content">
+          <p class="listing-category">${category}</p>
+          <h3>${name}</h3>
+          <p class="listing-area">📍 ${area}</p>
+          <div class="listing-actions">
+            ${callButton}
+            ${directionsButton}
+          </div>
+        </div>
+      </article>
+    `;
+  }
 
-    state.query = $("searchInput")?.value || "";
-    renderListings();
+  function renderListings() {
+    if (!listingGrid) return;
 
-    $("directory")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  });
-}
+    const results = getFilteredListings();
 
-/* Live search */
-const searchInput = $("searchInput");
+    listingGrid.innerHTML = results
+      .map(createListingCard)
+      .join("");
 
-if (searchInput) {
-  searchInput.addEventListener("input", event => {
-    state.query = event.target.value;
-    renderListings();
-  });
-}
-
-/* Category dropdown */
-const categoryFilter = $("categoryFilter");
-
-if (categoryFilter) {
-  categoryFilter.addEventListener("change", event => {
-    state.category = event.target.value;
-    renderListings();
-  });
-}
-
-/* Sorting */
-const sortFilter = $("sortFilter");
-
-if (sortFilter) {
-  sortFilter.addEventListener("change", event => {
-    state.sort = event.target.value;
-    renderListings();
-  });
-}
-
-/* Clear filters */
-const clearFilters = $("clearFilters");
-
-if (clearFilters) {
-  clearFilters.addEventListener("click", () => {
-    state.query = "";
-    state.category = "";
-    state.sort = "name";
-
-    if ($("searchInput")) $("searchInput").value = "";
-    if ($("categoryFilter")) $("categoryFilter").value = "";
-    if ($("sortFilter")) $("sortFilter").value = "name";
-
-    renderListings();
-  });
-}
-
-/* Category shortcut navigation */
-document.querySelectorAll("[data-category]").forEach(element => {
-  element.addEventListener("click", event => {
-    const category = element.dataset.category;
-
-    if (!allCategories.includes(category)) return;
-
-    event.preventDefault();
-
-    state.category = category;
-    state.query = "";
-
-    if ($("searchInput")) $("searchInput").value = "";
-    if ($("categoryFilter")) {
-      $("categoryFilter").value = category;
+    if (resultCount) {
+      resultCount.textContent =
+        `${results.length} ${results.length === 1 ? "listing" : "listings"} found`;
     }
 
-    renderListings();
+    if (emptyState) {
+      emptyState.hidden = results.length !== 0;
+    }
 
-    $("directory")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+    if (listingGrid) {
+      listingGrid.hidden = results.length === 0;
+    }
+
+    if (directoryTitle) {
+      directoryTitle.textContent = activeShortcut
+        ? activeShortcut
+        : categoryFilter?.value || "Explore the Directory";
+    }
+
+    if (directorySubtitle) {
+      directorySubtitle.textContent = activeShortcut
+        ? `Discover ${activeShortcut.toLowerCase()} in Manuguru.`
+        : "Find local businesses, essential services and places around Manuguru.";
+    }
+  }
+
+  function resetFilters() {
+    if (searchInput) searchInput.value = "";
+    if (categoryFilter) categoryFilter.value = "";
+    if (sortFilter) sortFilter.value = "name";
+
+    activeShortcut = "";
+    renderListings();
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      renderListings();
+
+      $("directory")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", renderListings);
+  }
+
+  if (categoryFilter) {
+    categoryFilter.addEventListener("change", () => {
+      activeShortcut = "";
+      renderListings();
+    });
+  }
+
+  if (sortFilter) {
+    sortFilter.addEventListener("change", renderListings);
+  }
+
+  if (clearFilters) {
+    clearFilters.addEventListener("click", resetFilters);
+  }
+
+  document.querySelectorAll("[data-category]").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      const shortcut = element.dataset.category;
+      if (!shortcut) return;
+
+      event.preventDefault();
+
+      activeShortcut = shortcut;
+
+      if (categoryFilter) {
+        categoryFilter.value = "";
+      }
+
+      renderListings();
+
+      $("directory")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     });
   });
-});
 
-/* Footer year */
-const year = $("year");
+  const yearElement = $("year");
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
 
-if (year) {
-  year.textContent = new Date().getFullYear();
-}
+  setupCategoryFilter();
+  renderListings();
 
-/* Initialise the directory */
-buildCategoryFilter();
-renderListings();
+  console.info(
+    `Manuguru Town Guide initialized with ${listings.length} listings.`
+  );
+})();

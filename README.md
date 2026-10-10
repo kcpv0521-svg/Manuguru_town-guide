@@ -19,3 +19,7 @@ A responsive, bilingual-ready static directory for local businesses, public serv
 - Contact numbers and areas are community-provided and may be incomplete or outdated. Verify details before relying on them.
 - This is a static website. Search, filters, phone links, and Google Maps search links work in the browser. It does not yet have a real business-submission backend or live authority lookup.
 - Some visual background photos load from Unsplash and require an internet connection.
+
+
+## Manuguru heritage visual
+The hero background uses `manuguru-heritage.svg`, a locally included stylized illustration inspired by coal-mining landscapes and sunset colors. It is an illustration, not a documentary photograph of a specific Manuguru site. Replace it with your own verified local photo later if you prefer.

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#243747"/><stop offset=".45" stop-color="#d18a65"/><stop offset=".72" stop-color="#f3bb78"/><stop offset="1" stop-color="#263f3a"/></linearGradient>
+ <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3f655f"/><stop offset="1" stop-color="#122d31"/></linearGradient>
+ <linearGradient id="coal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26333a"/><stop offset="1" stop-color="#101a20"/></linearGradient>
+ <radialGradient id="sun"><stop stop-color="#fff5bc"/><stop offset="1" stop-color="#ffd18a" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1800" height="900" fill="url(#sky)"/>
+<circle cx="1370" cy="300" r="170" fill="url(#sun)"/><circle cx="1370" cy="300" r="45" fill="#ffe3a3"/>
+<path d="M0 430 L120 340 250 390 390 310 520 380 680 285 820 380 980 300 1120 365 1280 280 1450 360 1600 300 1800 380 V610 H0Z" fill="#30494a"/>
+<path d="M0 500 L150 425 290 475 440 390 620 465 770 395 940 470 1120 405 1280 455 1440 390 1600 455 1800 410 V650 H0Z" fill="#203c37"/>
+<!-- mining ridge and spoil heaps -->
+<path d="M0 580 L150 510 280 550 420 470 560 555 710 485 860 560 1030 480 1170 560 1350 475 1510 560 1680 500 1800 545 V690 H0Z" fill="#26383a"/>
+<path d="M80 630 L280 510 440 620 610 535 760 630 930 520 1110 640 1270 530 1450 630 1640 520 1800 620 V720 H80Z" fill="#182b2c"/>
+<!-- mine structures -->
+<g stroke="#151e22" stroke-width="13" fill="none" stroke-linecap="square">
+ <path d="M1480 530 V300 L1585 530 M1480 300 H1585 M1505 350 H1560 M1520 400 H1570"/>
+ <path d="M1450 300 H1610 M1468 275 H1595 M1490 275 V250 H1575 V275"/>
+ <path d="M1010 545 V375 L1110 545 M1010 375 H1110 M1030 415 H1090 M1040 455 H1100"/>
+ <path d="M985 375 H1135 M1000 350 H1120"/>
+</g>
+<g fill="#f4c27d" opacity=".6"><rect x="1490" y="310" width="10" height="10"/><rect x="1545" y="310" width="10" height="10"/><rect x="1020" y="385" width="9" height="9"/></g>
+<!-- distant town lights -->
+<g fill="#ffcf87" opacity=".8"><circle cx="240" cy="560" r="4"/><circle cx="315" cy="545" r="3"/><circle cx="540" cy="575" r="4"/><circle cx="690" cy="540" r="3"/><circle cx="1220" cy="550" r="4"/><circle cx="1320" cy="520" r="3"/><circle cx="1670" cy="555" r="4"/></g>
+<!-- river / lowland glow -->
+<path d="M0 650 C260 610 390 710 650 670 S1050 640 1270 700 S1590 650 1800 685 V900 H0Z" fill="url(#water)"/>
+<path d="M0 730 C300 690 410 770 700 730 S1130 720 1380 760 S1630 725 1800 750" fill="none" stroke="#efb67b" stroke-width="7" opacity=".55"/>
+<path d="M0 795 C220 770 420 820 650 795 S1030 785 1280 820 S1600 790 1800 810" fill="none" stroke="#9fb8a8" stroke-width="4" opacity=".4"/>
+<!-- foreground coal heaps -->
+<path d="M0 850 L180 760 300 800 440 720 570 820 760 750 910 845 1070 755 1220 830 1390 745 1550 820 1700 755 1800 800 V900 H0Z" fill="url(#coal)"/>
+<!-- suspended coal bucket / cableway silhouette -->
+<g stroke="#111c22" stroke-width="10" fill="none"><path d="M760 0 L1160 440 L1510 0"/><path d="M1050 315 L1050 420"/></g>
+<g transform="translate(970 405)">
+ <path d="M0 0 H160 L142 130 Q80 160 18 130Z" fill="#10191e" stroke="#0a1418" stroke-width="12"/>
+ <path d="M14 20 H148 L135 50 H25Z" fill="#394449"/>
+ <path d="M25 2 L45 -18 70 4 92 -20 122 4 145 -8" fill="none" stroke="#687579" stroke-width="9"/>
+ <path d="M20 70 L135 70 M25 98 L128 98" stroke="#536165" stroke-width="5" opacity=".65"/>
+</g>
+<!-- dark overlay-friendly vignette -->
+<rect width="1800" height="900" fill="#071c1c" opacity=".16"/>
+</svg>

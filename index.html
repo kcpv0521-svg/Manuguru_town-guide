@@ -3,56 +3,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Discover shops, schools, hospitals, restaurants and local services in Manuguru.">
-  <title>Manuguru | Town Guide</title>
+  <meta name="theme-color" content="#123f35">
+  <meta name="description" content="Discover local businesses, essential services, public offices and places in Manuguru, Telangana.">
+  <title>Manuguru Local Directory | Your Town, All in One Place</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#directory">Skip to directory</a>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="Town Guide home"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a>
-    <nav><a href="#categories">Categories</a><a href="#directory">Explore places</a><a href="#about">About</a></nav>
-    <a class="list-link" href="mailto:town-guide@example.com?subject=Manuguru%20business%20listing">List your business ↗</a>
+    <a class="brand" href="#" aria-label="Manuguru Local Directory home">
+      <span class="brand-emblem" aria-hidden="true">⌁</span>
+      <span class="brand-copy"><strong>Manuguru</strong><small>Local Directory</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="active" href="#">Home</a>
+      <a href="#directory">Businesses</a>
+      <a href="#public-services">Public Services</a>
+      <a href="#directory">Map / Authority Lookup</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="language-switch" aria-label="Language">
+      <button id="englishButton" class="language-option selected" type="button">English</button>
+      <button id="teluguButton" class="language-option" type="button">తెలుగు</button>
+    </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow"><span class="dot"></span> YOUR LOCAL DISCOVERY GUIDE</span>
-        <h1>Welcome to<br><em>Manuguru.</em></h1>
-        <p>Find the places, services and local businesses that make your town yours.</p>
-        <form class="searchbar" id="searchForm">
-          <span aria-hidden="true">⌕</span>
-          <input id="searchInput" type="search" placeholder="Search shops, schools, hospitals..." aria-label="Search businesses and places">
-          <button type="submit">Search</button>
-        </form>
-        <div class="hero-note"><span>⌖</span> Manuguru, Telangana, India</div>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-shade"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow light">DISCOVER <span>•</span> CONNECT <span>•</span> SUPPORT</p>
+          <h1 id="heroTitle" data-en="Your Manuguru," data-te="మన మణుగూరు,">Your Manuguru,<br><em>All in One Place</em></h1>
+          <p class="hero-description" data-en="Find local businesses, essential services and important public contacts for a better, easier life in Manuguru." data-te="మణుగూరులో స్థానిక వ్యాపారాలు, అవసరమైన సేవలు, ముఖ్యమైన ప్రభుత్వ సంప్రదింపులను సులభంగా కనుగొనండి.">Find local businesses, essential services and important public contacts for a better, easier life in Manuguru.</p>
+          <p class="telugu-tagline">మనమణుగూరు లోని అన్ని వివరాలు ఒకే చోట.</p>
+          <form class="searchbar" id="searchForm" role="search">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Search businesses, services, or public offices..." aria-label="Search businesses and places">
+            <button type="submit" data-en="Search" data-te="వెతకండి">Search <span aria-hidden="true">→</span></button>
+          </form>
+          <div class="quick-searches"><span>e.g.</span>
+            <button type="button" data-query="hospital">Hospital</button>
+            <button type="button" data-query="electrician">Electrician</button>
+            <button type="button" data-query="municipality">Municipality</button>
+            <button type="button" data-query="గ్రామ పంచాయతీ">గ్రామ పంచాయతీ</button>
+            <button type="button" data-query="pharmacy">Pharmacy</button>
+          </div>
+        </div>
+        <div class="hero-signature" aria-hidden="true"><span>Manuguru</span><small>The Coal Town</small></div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="sun"></div><div class="hill hill-back"></div><div class="hill hill-front"></div>
-        <div class="map-card"><span class="map-pin">⌖</span><div><b>Manuguru</b><small>Explore your town</small></div></div>
-        <div class="floating-label label-one">Local places <b>↗</b></div>
-        <div class="floating-label label-two">One town, one guide</div>
-      </div>
+      <div class="hero-bottom-fade"></div>
     </section>
 
-    <section class="section" id="categories">
-      <div class="section-heading"><div><span class="eyebrow">EXPLORE THE TOWN</span><h2>What are you looking for?</h2></div><span class="count-pill" id="totalCount"></span></div>
+    <section class="categories-section section" id="categories">
+      <div class="section-heading">
+        <div><p class="eyebrow">EXPLORE THE TOWN</p><h2 data-en="Explore Categories" data-te="విభాగాలను అన్వేషించండి">Explore Categories</h2><p class="section-subtitle" data-en="Browse by sector to find what you need in Manuguru." data-te="మణుగూరులో మీకు కావలసిన సేవలను విభాగాల వారీగా కనుగొనండి.">Browse by sector to find what you need in Manuguru.</p></div>
+        <a class="view-all" href="#directory" data-en="View All Categories →" data-te="అన్ని విభాగాలు →">View All Categories →</a>
+      </div>
       <div class="category-grid" id="categoryGrid"></div>
     </section>
 
-    <section class="directory section" id="directory">
-      <div class="section-heading directory-heading"><div><span class="eyebrow">LOCAL DIRECTORY</span><h2 id="directoryTitle">Explore Manuguru</h2><p class="muted" id="directorySubtitle">Browse the listings collected for your town.</p></div>
-        <div class="controls"><select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select><select id="sortFilter" aria-label="Sort listings"><option value="name">Name A–Z</option><option value="category">Category</option></select></div>
+    <section class="trust-strip" aria-label="Directory values">
+      <div class="trust-backdrop"></div>
+      <div class="trust-content">
+        <div class="trust-spacer"></div>
+        <div class="trust-item"><span class="trust-icon pin">⌖</span><strong>Know Your Area</strong><p>Find out which authority serves your locality.</p></div>
+        <div class="trust-item"><span class="trust-icon shield">✓</span><strong>Useful Information</strong><p>Contact details and locations in one place.</p></div>
+        <div class="trust-item"><span class="trust-icon people">♧</span><strong>Support Local</strong><p>Help local businesses grow.</p></div>
+        <div class="trust-item"><span class="trust-icon language">文</span><strong>Bilingual</strong><p>Available in Telugu and English.</p></div>
+        <div class="trust-spacer"></div>
       </div>
-      <div class="results-line"><span id="resultCount"></span><button id="clearFilters" class="text-button" type="button">Clear filters</button></div>
-      <div class="listing-grid" id="listingGrid"></div>
-      <div class="empty-state" id="emptyState" hidden><span>⌕</span><h3>No listings found</h3><p>Try another search or category.</p></div>
-      <p class="data-note">Directory information is collected from public listings and may be incomplete or outdated. Please confirm details with the business before visiting. Listings without a phone number have no contact number in the current dataset.</p>
     </section>
 
-    <section class="cta" id="about"><div><span class="eyebrow">BUILT FOR THE COMMUNITY</span><h2>Know a place we should add?</h2><p>Help make the Manuguru directory more useful by sharing a correction or a local business.</p></div><a href="mailto:town-guide@example.com?subject=Town%20Guide%20listing%20or%20correction">Suggest a listing <span>↗</span></a></section>
+    <section class="directory section" id="directory">
+      <div class="section-heading directory-heading">
+        <div><p class="eyebrow">LOCAL DIRECTORY</p><h2 id="directoryTitle">Explore Manuguru</h2><p id="directorySubtitle" class="section-subtitle">Find businesses, public services and useful places around town.</p></div>
+        <div class="controls">
+          <label class="sr-only" for="categoryFilter">Filter by category</label>
+          <select id="categoryFilter"><option value="">All categories</option></select>
+          <label class="sr-only" for="sortFilter">Sort listings</label>
+          <select id="sortFilter"><option value="name">Name A–Z</option><option value="category">Category</option><option value="area">Area</option></select>
+        </div>
+      </div>
+      <div class="results-line"><span id="resultCount" aria-live="polite"></span><button id="clearFilters" class="text-button" type="button">Clear filters</button></div>
+      <div class="listing-grid" id="listingGrid"></div>
+      <div class="empty-state" id="emptyState" hidden><span aria-hidden="true">⌕</span><h3>No listings found</h3><p>Try another search or category.</p><button class="button-secondary" id="emptyClear" type="button">Clear search</button></div>
+      <p class="data-note">Directory information may be incomplete or outdated. Please confirm contact details and locations before visiting. Listings without a phone number do not have a number in the current dataset.</p>
+    </section>
+
+    <section class="public-section section" id="public-services">
+      <div class="section-heading"><div><p class="eyebrow">COMMUNITY INFORMATION</p><h2>Public services & transport</h2><p class="section-subtitle">Useful local places from the current directory.</p></div></div>
+      <div class="service-highlights">
+        <button class="service-highlight" type="button" data-category="Banks, Atms & Public Services"><span>🏛️</span><strong>Public services</strong><small>Municipality, MRO office and public contacts</small></button>
+        <button class="service-highlight" type="button" data-category="Transport"><span>🚌</span><strong>Transport</strong><small>Bus station and railway station listings</small></button>
+        <button class="service-highlight" type="button" data-category="Temples, Theatres & Places"><span>📍</span><strong>Places around town</strong><small>Temples, theatre and local attractions</small></button>
+      </div>
+    </section>
+
+    <section class="cta" id="about"><div><p class="eyebrow">BUILT FOR THE COMMUNITY</p><h2>Know a place we should add?</h2><p>Help make the Manuguru directory more useful by sharing a correction or a local business.</p><small>To suggest an update, contact the site owner through your preferred channel.</small></div><a href="#directory">Explore the directory <span>↗</span></a></section>
   </main>
-  <footer><a class="brand footer-brand" href="#"><span class="brand-icon">⌖</span><span>TOWN <b>GUIDE</b></span></a><span>Discover your town. Support local businesses.</span><span>© <span id="year"></span> Town Guide · Manuguru</span></footer>
+
+  <footer><a class="brand footer-brand" href="#"><span class="brand-emblem">⌁</span><span class="brand-copy"><strong>Manuguru</strong><small>Local Directory</small></span></a><span>Discover your town. Support local businesses.</span><span>© <span id="year"></span> Manuguru Local Directory</span></footer>
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
